@@ -1,0 +1,37 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: azboot18gt
+spec:
+  replicas: 2
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5 
+  template:
+    metadata:
+      labels:
+        app: azboot18gt
+    spec:
+      containers:
+      - name: azboot18gt
+        image: josemaord/azboot18gt:1.0
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: 50m
+          limits:
+            cpu: 100m
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: azboot18gt
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+  selector:
+    app: azboot18gt
